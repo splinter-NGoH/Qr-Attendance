@@ -33,3 +33,4 @@ drf-yasg
 
 Pillow
 django-autoslug==1.9.8
+qrcode

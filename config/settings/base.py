@@ -84,6 +84,7 @@ LOCAL_APPS = [
     "qr_code.students",
     "qr_code.doctors",
     "qr_code.courses",
+    "qr_code.lecture",
     "qr_code.teaching_assistance",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
