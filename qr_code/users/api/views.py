@@ -9,7 +9,7 @@ from .serializers import CreateUserSerializer
 from djoser import signals, utils
 from djoser.conf import settings
 from djoser.compat import get_user_email
-
+from .exceptions import IfStudentStudentIdReq
 User = get_user_model()
 
 
@@ -29,8 +29,10 @@ User = get_user_model()
 
 
 class CustomRegistrationView(UserViewSet):
-    def perform_create(self, serializer):
+    def perform_create(self, serializer, **kwargs):
+
         super(CustomRegistrationView,self).perform_create(serializer)
     
     def get_serializer_class(self):
+
         return CreateUserSerializer

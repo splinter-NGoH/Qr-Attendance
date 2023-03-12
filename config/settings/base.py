@@ -69,7 +69,7 @@ THIRD_PARTY_APPS = [
     "crispy_bootstrap5",
     "allauth",
     "allauth.account",
-    # "allauth.socialaccount",
+    "allauth.socialaccount",
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
@@ -83,6 +83,7 @@ LOCAL_APPS = [
     "qr_code.common",
     "qr_code.students",
     "qr_code.doctors",
+    "qr_code.courses",
     "qr_code.teaching_assistance",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

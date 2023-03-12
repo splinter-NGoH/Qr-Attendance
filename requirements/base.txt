@@ -20,7 +20,16 @@ djangorestframework==3.14.0  # https://github.com/encode/django-rest-framework
 django-cors-headers==3.14.0  # https://github.com/adamchainz/django-cors-headers
 # DRF-spectacular for api documentation
 drf-spectacular==0.25.1  # https://github.com/tfranzel/drf-spectacular
+django-filter==21.1
 
 djoser
 djangorestframework-simplejwt
 PyJWT
+django-countries
+django-phonenumber-field==5.2.0
+phonenumbers==8.12.33
+drf-yasg
+
+
+Pillow
+django-autoslug==1.9.8

@@ -38,7 +38,11 @@ urlpatterns += [
     # apps urls
     # path("api/v1/doctors/", include("qr_code.doctors.urls")),
     path("api/v1/", include("users.api.urls")),
-
+    path("api/v1/students-profiles/", include("qr_code.students.urls")),
+    path("api/v1/doctors-profiles/", include("qr_code.doctors.urls")),
+    path("api/v1/courses/", include("qr_code.courses.urls")),
+    # path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+    # path("api/v1/meals/", include("sett_elkol.meal.urls")),
 
 ]
 

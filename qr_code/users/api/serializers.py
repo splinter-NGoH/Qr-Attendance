@@ -5,15 +5,11 @@ from rest_framework import serializers
 User = get_user_model()
 
 class CreateUserSerializer(UserCreateSerializer):
-    student_id = serializers.CharField(required=False,default=None)
     last_name = serializers.CharField(required=False,default="")
  
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ["id", "username", "email", "first_name", "last_name", "password", "student_id"]
-    # def perform_create(self, validated_data):
-    #     super(CreateUserSerializer,self).perform_create(validated_data)
-    #     print(validated_data)
+        fields = ["id", "username", "email", "first_name", "last_name", "password", "student_id","user_type"]
 
 class UserSerializer(serializers.ModelSerializer):
     first_name = serializers.SerializerMethodField()

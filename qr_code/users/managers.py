@@ -12,13 +12,12 @@ class CustomUserManger(BaseUserManager):
             raise ValueError(_("You must provide a valid email"))
 
     def create_user(
-        self, username, email, password, first_name, last_name,student_id, **extra_fields
+        self, username, email, password, first_name, **extra_fields
     ):
         if not username:
             raise ValidationError(_("User must submit username"))
         if not first_name:
             raise ValidationError(_("User must submit first_name"))
-
 
         if email:
             email = self.normalize_email(email)
@@ -30,9 +29,7 @@ class CustomUserManger(BaseUserManager):
             username=username,
             email=email,
             first_name=first_name,
-            last_name=last_name,
-            student_id=student_id,
-            **extra_fields
+           **extra_fields
         )
 
         user.set_password(password)
@@ -42,7 +39,7 @@ class CustomUserManger(BaseUserManager):
         return user
 
     def create_superuser(
-        self, username, email, password, first_name, last_name,student_id, **extra_fields
+        self, username, email, password, first_name, **extra_fields
     ):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
@@ -62,7 +59,7 @@ class CustomUserManger(BaseUserManager):
             raise ValueError(_("email must be provided"))
 
         user = self.create_user(
-            username, email, password, first_name, last_name,student_id, **extra_fields
+            username, email, password, first_name, **extra_fields
         )
         user.save(using=self._db)
         return user
