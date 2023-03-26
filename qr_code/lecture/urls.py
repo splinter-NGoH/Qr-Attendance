@@ -11,5 +11,8 @@ urlpatterns = [
     path(
         "create/attendancerequest/", CreateAttendanceRequestAPIView.as_view(), name="create-attendanceforuser"
     ),
+    path(
+        "create/student-attendance/", CreateStudentAttendance.as_view(), name="create-studentattendance"
+    ),
    
 ]

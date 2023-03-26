@@ -13,12 +13,15 @@ User = get_user_model()
 
 
 class Lectures(TimeStampedUUIDModel):
-
+    class Types(models.TextChoices):
+        SECTION = "section", _("section")
+        LECTURE = "lecture", _("lecture")
     title = models.CharField(verbose_name=_("title"), max_length=250)
     slug = AutoSlugField(populate_from="title", always_update=True, unique=True)
     description = models.TextField(verbose_name=_("description"), max_length=255)
     floor = models.CharField(verbose_name=_("lecture floor"),max_length=20)
     lecture_no = models.IntegerField(verbose_name=_("lecture number"), default=0)
+    type = models.CharField(verbose_name=_("Type"), choices=Types.choices, default=Types.SECTION,max_length=20)
 
     def __str__(self):
         return f"{self.title}"
