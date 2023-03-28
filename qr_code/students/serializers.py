@@ -1,7 +1,7 @@
 from django_countries.serializer_fields import CountryField
 from rest_framework import serializers
 
-from .models import Student
+from .models import Student, StudentAttendance
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -56,4 +56,26 @@ class UpdateStudentSerializer(serializers.ModelSerializer):
             "student_id",
 
         ]
+
+
+class CreateStudentAttendanceSerializer(serializers.ModelSerializer):
+    created_at = serializers.SerializerMethodField()
+
+    class Meta:
+        model = StudentAttendance
+        fields = [
+            "id",
+            "student",
+            "lecture",
+            "course",
+            "attendance_request",
+            "status",
+            "created_at",
+     
+        ]
+
+    def get_created_at(self, obj):
+        then = obj.created_at
+        formatted_date = then.strftime("%m/%d/%Y, %H:%M:%S")
+        return formatted_date
 

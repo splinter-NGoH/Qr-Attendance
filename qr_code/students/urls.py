@@ -5,6 +5,7 @@ from .views import (
     StudentListAPIView,
     UpdateStudentAPIView,
     StudentProfileAPIView,
+    CreateStudentAttendance,
 )
 
 urlpatterns = [
@@ -18,5 +19,10 @@ urlpatterns = [
     path(
         "update_student/<str:username>/", UpdateStudentAPIView.as_view(), name="Student-update"
     ),
-
+    path(
+        "create_student_attendance/<str:uuid>/", CreateStudentAttendance.as_view(), name="create-student-attendance"
+    ),
+    path(
+        "get_student_attendances/", CreateStudentAttendance.as_view(), name="get-student-attendance"
+    ),
 ]

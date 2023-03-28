@@ -11,7 +11,7 @@ class LecturesAdmin(admin.ModelAdmin):
 admin.site.register(models.Lectures, LecturesAdmin)
 
 class AttendanceRequestAdmin(admin.ModelAdmin):
-    list_display = ["pkid", "lecture", "course", "period"]
+    list_display = ["pkid","id", "lecture", "course", "period","created_at"]
     list_display_links = ["pkid", "lecture"]
 
 

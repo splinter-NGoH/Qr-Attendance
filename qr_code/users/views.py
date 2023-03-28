@@ -5,6 +5,10 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, RedirectView, UpdateView, TemplateView
 from djoser import email
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.response import Response
+from rest_framework import status, permissions
 
 User = get_user_model()
 
@@ -49,3 +53,15 @@ user_redirect_view = UserRedirectView.as_view()
 class ActivateAccount(TemplateView):
     template_name = "activation.html"
 
+
+class LogoutView(APIView):
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(data=str(e),status=status.HTTP_400_BAD_REQUEST)

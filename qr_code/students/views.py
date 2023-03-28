@@ -10,12 +10,13 @@ from rest_framework.views import APIView
 
 # from authors_api.settings.production import DEFAULT_FROM_EMAIL
 
-from .exceptions import  NotYourStudent
-from .models import Student
+from .exceptions import  NotYourStudent, IsStudentOrReadOnly, InvalidQrcode
+from .models import Student, StudentAttendance
 from .pagination import StudentPagination
 from .renderers import StudentJSONRenderer, StudentsJSONRenderer
-from .serializers import  StudentSerializer, UpdateStudentSerializer
-
+from .serializers import  StudentSerializer, UpdateStudentSerializer, CreateStudentAttendanceSerializer
+from .objects import CreateStudentAttendanceObject
+from qr_code.lecture.models import AttendanceRequest
 User = get_user_model()
 
 
@@ -84,3 +85,42 @@ class UpdateStudentAPIView(APIView):
             serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class CreateStudentAttendance(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated,]
+    serializer_class = CreateStudentAttendanceSerializer
+    ordering_fields = ["-created_at"]
+
+    def get(self, request):
+        try:
+            specific_user = User.objects.get(username=request.user.username)
+        except User.DoesNotExist:
+            raise NotFound("User with that username does not exist")
+
+        student_attendance_request = StudentAttendance.objects.filter(student__user__pkid=specific_user.pkid).order_by("-created_at")
+        serializer = CreateStudentAttendanceSerializer(student_attendance_request, many=True)
+        formatted_response = {
+            "status_code": status.HTTP_200_OK,
+            "student_attendance_request": serializer.data,
+        }
+        return Response(formatted_response, status=status.HTTP_200_OK)
+
+    def post(self, request,uuid, **kwargs):
+        try:
+            attendance_request = AttendanceRequest.objects.get(id=uuid)
+        except AttendanceRequest.DoesNotExist:
+            raise NotFound("AttendanceRequest does not exist")
+        # Add check if student scaned before can't scan more than one time
+        create_student_attendance = CreateStudentAttendanceObject(attendance_request)
+        if create_student_attendance.qrcode_not_valid():
+            raise InvalidQrcode
+        data = request.data
+        data["attendance_request"] = attendance_request.pkid
+        data["student"] = Student.objects.get(user=request.user).pkid
+        data["lecture"] = attendance_request.lecture.pkid
+        data["course"] = attendance_request.course.pkid
+        data["status"] = StudentAttendance.Status.ACCEPTED
+        serializer = CreateStudentAttendanceSerializer(data=data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

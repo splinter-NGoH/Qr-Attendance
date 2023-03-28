@@ -51,6 +51,10 @@ class Student(TimeStampedUUIDModel):
 
     
 class StudentAttendance(TimeStampedUUIDModel):
+    class Status(models.TextChoices):
+        ACCEPTED = "accepted", _("accepted")
+        REJECTED = "rejected", _("rejected")
+
     student = models.ForeignKey(Student, related_name="student_attendance", on_delete=models.CASCADE)
     lecture = models.ForeignKey(
         Lectures, related_name="student_att_lecture", on_delete=models.CASCADE
@@ -59,7 +63,7 @@ class StudentAttendance(TimeStampedUUIDModel):
         Course, related_name="student_att_course", on_delete=models.CASCADE
     )
     attendance_request = models.ForeignKey(AttendanceRequest, related_name="student_attendance_requests", on_delete=models.CASCADE)
-
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.REJECTED)
 
     def __str__(self):
         return f"{self.student.user.username}'s student"
