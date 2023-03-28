@@ -76,7 +76,7 @@ class UpdateStudentAPIView(APIView):
         user_name = request.user.username
         if user_name != username:
             raise NotYourStudent
-
+    #ee
         data = request.data
         serializer = UpdateStudentSerializer(
             instance=request.user.student, data=data, partial=True
