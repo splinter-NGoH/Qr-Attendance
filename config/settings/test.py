@@ -8,7 +8,7 @@ from .base import env
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = env(
+SECRET_KEY = os.getenv(
     "DJANGO_SECRET_KEY",
     default="zFOjJ6QFX5BaqDuzXm5IIuokUNGLxgZtAjnowObUVKhG5xHrcJiepHyQRqiqiKWw",
 )
