@@ -22,7 +22,7 @@ class Course(TimeStampedUUIDModel):
     banner_image = models.ImageField(
         verbose_name=_("banner image"), default="/customer_default.jpg"
     )
-    price = models.IntegerField(verbose_name=_("price"), default=0)
+    session_counts = models.IntegerField(verbose_name=_("session_counts"), default=12)
 
     def __str__(self):
         return f"{self.slug} Course Code"

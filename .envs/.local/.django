@@ -2,5 +2,6 @@
 # ------------------------------------------------------------------------------
 USE_DOCKER=yes
 IPYTHONDIR=/app/.ipython
-SIGNING_KEY=XSm8lLNS3Jl9zrOLGBN27QjnDPmaX05PRJtnEE9B7KUToG43AzE
+SIGNING_KEY=XSm8lllLNS3Jl9zrOLaGBN27QjnDPmaX05PRJtnEE9B7KUToG43AzE
 
+DATABASE_URL=postgres://postgres:Casherboy1@127.0.0.1:5432/qr_code

@@ -68,10 +68,10 @@ if settings.DEBUG:
         ),
         path("500/", default_views.server_error),
     ]
-    if "debug_toolbar" in settings.INSTALLED_APPS:
-        import debug_toolbar
+    # if "debug_toolbar" in settings.INSTALLED_APPS:
+    #     import debug_toolbar
 
-        urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
+    #     urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
 admin.site.site_header = "Qr Attendance"
 admin.site.site_title = "Qr Attendance Admin Portal"
 admin.site.index_title = "Welcome to the Qr Attendance Portal"

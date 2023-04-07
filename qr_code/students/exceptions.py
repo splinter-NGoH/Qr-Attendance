@@ -13,3 +13,8 @@ class IsStudentOrReadOnly(APIException):
 class InvalidQrcode(APIException):
     status_code = 403
     default_detail = "QrCode Expired"
+
+
+class DuplicateQrcode(APIException):
+    status_code = 403
+    default_detail = "QrCode Duplicated"

@@ -7,16 +7,19 @@ from rest_framework import generics, permissions, status
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.db.models import Avg, Count
 
 # from authors_api.settings.production import DEFAULT_FROM_EMAIL
 
-from .exceptions import  NotYourStudent, IsStudentOrReadOnly, InvalidQrcode
+from .exceptions import  NotYourStudent, IsStudentOrReadOnly, InvalidQrcode, DuplicateQrcode
 from .models import Student, StudentAttendance
 from .pagination import StudentPagination
 from .renderers import StudentJSONRenderer, StudentsJSONRenderer
-from .serializers import  StudentSerializer, UpdateStudentSerializer, CreateStudentAttendanceSerializer
+from .serializers import  StudentSerializer, UpdateStudentSerializer, CreateStudentAttendanceSerializer,ListStudentAttendanceSerializer
 from .objects import CreateStudentAttendanceObject
 from qr_code.lecture.models import AttendanceRequest
+from qr_code.courses.models import StudentCourses, Course
+
 User = get_user_model()
 
 
@@ -98,7 +101,7 @@ class CreateStudentAttendance(generics.GenericAPIView):
             raise NotFound("User with that username does not exist")
 
         student_attendance_request = StudentAttendance.objects.filter(student__user__pkid=specific_user.pkid).order_by("-created_at")
-        serializer = CreateStudentAttendanceSerializer(student_attendance_request, many=True)
+        serializer = ListStudentAttendanceSerializer(student_attendance_request, many=True)
         formatted_response = {
             "status_code": status.HTTP_200_OK,
             "student_attendance_request": serializer.data,
@@ -111,9 +114,11 @@ class CreateStudentAttendance(generics.GenericAPIView):
         except AttendanceRequest.DoesNotExist:
             raise NotFound("AttendanceRequest does not exist")
         # Add check if student scaned before can't scan more than one time
-        create_student_attendance = CreateStudentAttendanceObject(attendance_request)
+        create_student_attendance = CreateStudentAttendanceObject(attendance_request, request=request)
         if create_student_attendance.qrcode_not_valid():
             raise InvalidQrcode
+        if  create_student_attendance.duplicate():
+            raise DuplicateQrcode
         data = request.data
         data["attendance_request"] = attendance_request.pkid
         data["student"] = Student.objects.get(user=request.user).pkid
@@ -123,4 +128,37 @@ class CreateStudentAttendance(generics.GenericAPIView):
         serializer = CreateStudentAttendanceSerializer(data=data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        formatted_response = {
+            "status_code": status.HTTP_200_OK,
+            "student_attendance_request": {
+            "id":serializer.data["id"],
+            "status":"Added Succeffully"
+            }
+        }
+        return Response(formatted_response, status=status.HTTP_201_CREATED)
+
+
+class StudentAttendanceReport(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated,]
+    ordering_fields = ["-created_at"]
+    def student_attendance(self, request, course, course_type):
+        return StudentAttendance.objects.filter(lecture__type=course_type, student__user__pkid=request, course=course).count()
+    def get(self, request, course):
+        try:
+            course_obj = Course.objects.get(id=course)
+        except Course.DoesNotExist:
+            raise NotFound("Course does not exist")
+        try:
+            student_course = StudentCourses.objects.filter(user=request.user, course=course_obj.pkid)
+        except StudentCourses.DoesNotExist:
+            raise NotFound("Student doesn't assigned to this course")
+        lectures_count= self.student_attendance(request.user.pkid, course_obj.pkid, course_type="lecture")
+        sections_count= self.student_attendance(request.user.pkid, course_obj.pkid, course_type="section")
+        formatted_response = {
+            "status_code": status.HTTP_200_OK,
+            "lectures_count": lectures_count,
+            "sections_count": sections_count,
+            "lectures_percent": (lectures_count / course_obj.session_counts) *100,
+            "sections_percent":  (sections_count / course_obj.session_counts) *100,
+        }
+        return Response(formatted_response, status=status.HTTP_200_OK)

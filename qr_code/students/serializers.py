@@ -79,3 +79,33 @@ class CreateStudentAttendanceSerializer(serializers.ModelSerializer):
         formatted_date = then.strftime("%m/%d/%Y, %H:%M:%S")
         return formatted_date
 
+
+
+class ListStudentAttendanceSerializer(serializers.ModelSerializer):
+    created_at = serializers.SerializerMethodField()
+    student_id = serializers.CharField(source="student.id")
+    student_name = serializers.CharField(source="student.user.first_name")
+    lecture_id = serializers.CharField(source="lecture.id")
+    course_id = serializers.CharField(source="course.id")
+    attendance_request_id = serializers.CharField(source="attendance_request.id")
+
+    class Meta:
+        model = StudentAttendance
+        fields = [
+            "id",
+            "student_id",
+            "student_name",
+            "lecture_id",
+            "course_id",
+            "attendance_request_id",
+            "status",
+            "created_at",
+     
+        ]
+
+    def get_created_at(self, obj):
+        then = obj.created_at
+        formatted_date = then.strftime("%m/%d/%Y, %H:%M:%S")
+        return formatted_date
+
+

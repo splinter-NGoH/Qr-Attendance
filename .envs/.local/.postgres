@@ -5,3 +5,5 @@ POSTGRES_PORT=5432
 POSTGRES_DB=qr_code
 POSTGRES_USER=qouOkgpUCRQQMPObPjaKGbgSbyaKnmtX
 POSTGRES_PASSWORD=cf9u6H0vkqCBjja19f3j0F8tfr5cHo6GFV8b9Gil8vg4rqmZbhbhSuM3GxXYvqHV
+
+DATABASE_URL=postgres://postgres:Casherboy1@127.0.0.1:5432/qr_code

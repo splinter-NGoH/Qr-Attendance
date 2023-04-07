@@ -35,7 +35,7 @@ class UserAdmin(BaseUserAdmin):
         ),
         (
             _("Personal Information"),
-            {"fields": ("username", "first_name", "last_name")},
+            {"fields": ("username", "first_name", "last_name", "user_type")},
         ),
         (
             _("Permissions and Groups"),
@@ -56,7 +56,7 @@ class UserAdmin(BaseUserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("email", "password1", "password2", "is_staff", "is_active"),
+                "fields": ("email","user_type", "password1", "password2", "is_staff", "is_active"),
             },
         ),
     )

@@ -65,3 +65,19 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(data=str(e),status=status.HTTP_400_BAD_REQUEST)
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    def validate(self, attrs):
+        ## This data variable will contain refresh and access tokens
+        data = super().validate(attrs)
+        ## You can add more User model's attributes like username,email etc. in the data dictionary like this.
+        data['type'] = self.user.user_type
+        return data
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
