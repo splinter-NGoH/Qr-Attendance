@@ -272,7 +272,7 @@ tags
 dump.rdb
 
 ### Project template
-# qr_code/media/
+qr_code/media/
 
 .pytest_cache/
 .ipython/
