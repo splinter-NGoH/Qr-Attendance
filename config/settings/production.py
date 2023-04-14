@@ -55,7 +55,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 # STORAGES
 # ------------------------------------------------------------------------------
 # https://django-storages.readthedocs.io/en/latest/#installationAWS_DEFAULT_ACL = None
-AWS_DEFAULT_ACL = None
+AWS_DEFAULT_ACL = 'public-read'
 
 INSTALLED_APPS += ["storages"]  # noqa F405
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
@@ -63,9 +63,13 @@ AWS_ACCESS_KEY_ID = os.getenv("DJANGO_AWS_ACCESS_KEY_ID")
 print(AWS_ACCESS_KEY_ID)
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
 AWS_SECRET_ACCESS_KEY = os.getenv("DJANGO_AWS_SECRET_ACCESS_KEY")
+print(AWS_SECRET_ACCESS_KEY)
+
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
 AWS_STORAGE_BUCKET_NAME = os.getenv("DJANGO_AWS_STORAGE_BUCKET_NAME")
-AWS_S3_ENDPOINT_URL = 'https://nyc3.digitaloceanspaces.com'
+print(AWS_STORAGE_BUCKET_NAME)
+
+AWS_S3_ENDPOINT_URL = 'https://qrcode-attendance.fra1.digitaloceanspaces.com'
 
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
 AWS_QUERYSTRING_AUTH = False
@@ -89,15 +93,15 @@ aws_s3_domain = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 # STATIC
 # ------------------------
 STATIC_URL = 'https://%s/static/' % (AWS_S3_ENDPOINT_URL)
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # MEDIA
 # ------------------------------------------------------------------------------
 MEDIA_URL = f"https://{AWS_S3_ENDPOINT_URL}/media/"
 AWS_S3_FILE_OVERWRITE = False
 
-# DEFAULT_FILE_STORAGE = "qr_code.utils.storages.MediaRootS3Boto3Storage"
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+DEFAULT_FILE_STORAGE = "qr_code.utils.storages.MediaRootS3Boto3Storage"
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-from-email
