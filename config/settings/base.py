@@ -19,7 +19,7 @@ if READ_DOT_ENV_FILE:
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = True
+DEBUG = env("DEBUG", "False") == "True"
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
@@ -41,7 +41,7 @@ DATABASES = {}
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES['default'] = dj_database_url.config(
-    default=os.getenv("DATABASE_URL"),
+    default=env("DATABASE_URL"),
     conn_max_age=600,
     conn_health_checks=True,
 )
