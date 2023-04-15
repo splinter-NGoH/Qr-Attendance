@@ -6,7 +6,7 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["qr-code-attendance-ahzt4.ondigitalocean.app"])
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["*"])
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -56,48 +56,48 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 # ------------------------------------------------------------------------------
 # https://django-storages.readthedocs.io/en/latest/#installationAWS_DEFAULT_ACL = None
 
-INSTALLED_APPS += ["storages"]  # noqa F405
-AWS_ACCESS_KEY_ID = os.getenv("DJANGO_AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("DJANGO_AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = os.getenv("DJANGO_AWS_STORAGE_BUCKET_NAME")
-AWS_S3_ENDPOINT_URL = os.getenv("DJANGO_AWS_S3_ENDPOINT_URL")
-# AWS_S3_ENDPOINT_URL = 'https://qrcode-attendance.fra1.digitaloceanspaces.com'
-AWS_DEFAULT_ACL = 'public-read'
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-print(AWS_ACCESS_KEY_ID)
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-print(AWS_SECRET_ACCESS_KEY)
+# INSTALLED_APPS += ["storages"]  # noqa F405
+# AWS_ACCESS_KEY_ID = os.getenv("DJANGO_AWS_ACCESS_KEY_ID")
+# AWS_SECRET_ACCESS_KEY = os.getenv("DJANGO_AWS_SECRET_ACCESS_KEY")
+# AWS_STORAGE_BUCKET_NAME = os.getenv("DJANGO_AWS_STORAGE_BUCKET_NAME")
+# AWS_S3_ENDPOINT_URL = os.getenv("DJANGO_AWS_S3_ENDPOINT_URL")
+# # AWS_S3_ENDPOINT_URL = 'https://qrcode-attendance.fra1.digitaloceanspaces.com'
+# AWS_DEFAULT_ACL = 'public-read'
+# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+# print(AWS_ACCESS_KEY_ID)
+# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+# print(AWS_SECRET_ACCESS_KEY)
 
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-print(AWS_STORAGE_BUCKET_NAME)
+# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+# print(AWS_STORAGE_BUCKET_NAME)
 
 
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_QUERYSTRING_AUTH = False
-# DO NOT change these unless you know what you're doing.
-_AWS_EXPIRY = 60 * 60 * 24 * 7
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_S3_OBJECT_PARAMETERS = {
-    "CacheControl": f"max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate"
-}
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_S3_MAX_MEMORY_SIZE = env.int(
-    "DJANGO_AWS_S3_MAX_MEMORY_SIZE",
-    default=100_000_000,  # 100MB
-)
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-# AWS_S3_REGION_NAME = env("DJANGO_AWS_S3_REGION_NAME", default=None)
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#cloudfront
-# AWS_S3_CUSTOM_DOMAIN = os.getenv("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)
-# aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
-aws_s3_domain = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
-# STATIC
-# ------------------------
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-# MEDIA
-# ------------------------------------------------------------------------------
-DEFAULT_FILE_STORAGE = "qr_code.utils.storages.MediaRootS3Boto3Storage"
-MEDIA_URL = f"https://{aws_s3_domain}/media/"
+# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+# AWS_QUERYSTRING_AUTH = False
+# # DO NOT change these unless you know what you're doing.
+# _AWS_EXPIRY = 60 * 60 * 24 * 7
+# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+# AWS_S3_OBJECT_PARAMETERS = {
+#     "CacheControl": f"max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate"
+# }
+# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+# AWS_S3_MAX_MEMORY_SIZE = env.int(
+#     "DJANGO_AWS_S3_MAX_MEMORY_SIZE",
+#     default=100_000_000,  # 100MB
+# )
+# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+# # AWS_S3_REGION_NAME = env("DJANGO_AWS_S3_REGION_NAME", default=None)
+# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#cloudfront
+# # AWS_S3_CUSTOM_DOMAIN = os.getenv("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)
+# # aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+# aws_s3_domain = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+# # STATIC
+# # ------------------------
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# # MEDIA
+# # ------------------------------------------------------------------------------
+# DEFAULT_FILE_STORAGE = "qr_code.utils.storages.MediaRootS3Boto3Storage"
+# MEDIA_URL = f"https://{aws_s3_domain}/media/"
 
 # EMAIL
 # ------------------------------------------------------------------------------
