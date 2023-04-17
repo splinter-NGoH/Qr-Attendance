@@ -58,7 +58,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "slug",
-            "price",
+            # "price",
             # "tagList",
             "description",
             "banner_image",
