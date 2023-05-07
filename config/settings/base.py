@@ -312,7 +312,7 @@ SIMPLE_JWT = {
         "Bearer",
         "JWT",
     ),
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     "SIGNING_KEY": "XSm8lllLNS3Jl9zrOLaGBN27QjnDPmaX05PRJtnEE9B7KUToG43AzE",
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",

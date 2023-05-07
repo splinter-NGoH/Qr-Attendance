@@ -7,6 +7,7 @@ from .views import (
     StudentProfileAPIView,
     CreateStudentAttendance,
     StudentAttendanceReport,
+    StudentAttendanceReportByUsername,
 )
 
 urlpatterns = [
@@ -28,5 +29,8 @@ urlpatterns = [
     ),
     path(
         "attendance_report_by_course/<str:course>/", StudentAttendanceReport.as_view(), name="get-student-report"
+    ),
+    path(
+        "attendance_report_by_username_and_course/<str:course>/<str:username>/", StudentAttendanceReportByUsername.as_view(), name="get-student-report-by-username"
     ),
 ]

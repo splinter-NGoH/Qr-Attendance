@@ -162,3 +162,28 @@ class StudentAttendanceReport(generics.GenericAPIView):
             "sections_percent":  (sections_count / course_obj.session_counts) *100,
         }
         return Response(formatted_response, status=status.HTTP_200_OK)
+
+class StudentAttendanceReportByUsername(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated,]
+    ordering_fields = ["-created_at"]
+    def student_attendance(self, request, course, course_type):
+        return StudentAttendance.objects.filter(lecture__type=course_type, student__user__username=request, course=course).count()
+    def get(self, request, course, username):
+        try:
+            course_obj = Course.objects.get(id=course)
+        except Course.DoesNotExist:
+            raise NotFound("Course does not exist")
+        try:
+            student_course = StudentCourses.objects.filter(user__username=username, course=course_obj.pkid)
+        except StudentCourses.DoesNotExist:
+            raise NotFound("Student doesn't assigned to this course")
+        lectures_count= self.student_attendance(request.user.username, course_obj.pkid, course_type="lecture")
+        sections_count= self.student_attendance(request.user.username, course_obj.pkid, course_type="section")
+        formatted_response = {
+            "status_code": status.HTTP_200_OK,
+            "lectures_count": lectures_count,
+            "sections_count": sections_count,
+            "lectures_percent": (lectures_count / course_obj.session_counts) *100,
+            "sections_percent":  (sections_count / course_obj.session_counts) *100,
+        }
+        return Response(formatted_response, status=status.HTTP_200_OK)
