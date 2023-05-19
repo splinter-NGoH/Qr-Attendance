@@ -81,7 +81,6 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "drf_spectacular",
     "djoser",
-    "push_notifications",
     "fcm_django",
 
 ]
