@@ -170,7 +170,9 @@ class StudentAttendanceReportByUsername(generics.GenericAPIView):
         return StudentAttendance.objects.filter(lecture__type=course_type, student__user__username=request, course=course).count()
     def get(self, request, course, username):
         try:
+            print(course)
             course_obj = Course.objects.get(id=course)
+            
         except Course.DoesNotExist:
             raise NotFound("Course does not exist")
         try:

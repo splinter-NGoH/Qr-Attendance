@@ -3,12 +3,20 @@ from rest_framework.routers import DefaultRouter, SimpleRouter
 
 from qr_code.users.api.views import UserViewSet
 
+from rest_framework.routers import DefaultRouter
+from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet,  FCMDeviceViewSet
+
+
+
+
 if settings.DEBUG:
     router = DefaultRouter()
 else:
     router = SimpleRouter()
 
 router.register("users", UserViewSet)
+router.register('devices', FCMDeviceAuthorizedViewSet)
+router.register('devices_v2',  FCMDeviceViewSet)
 
 
 app_name = "api"

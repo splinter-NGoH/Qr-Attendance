@@ -21,11 +21,19 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet,  FCMDeviceViewSet
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
+router.register('devices', FCMDeviceAuthorizedViewSet)
+router.register('devices_v2',  FCMDeviceViewSet)
 
 # API URLS
 urlpatterns += [
     # API base url
+    path('fcm_django/', include(router.urls)),
+
     path("api/", include("config.api_router")),
+
     # DRF auth token
     path("api/auth/", include("djoser.urls")),
     path("api/auth/", include("djoser.urls.jwt")),
