@@ -15,8 +15,6 @@ else:
     router = SimpleRouter()
 
 router.register("users", UserViewSet)
-router.register('devices', FCMDeviceAuthorizedViewSet)
-router.register('devices_v2',  FCMDeviceViewSet)
 
 
 app_name = "api"

@@ -1,0 +1,94 @@
+{% set user = frappe.db.get_value("User", frappe.session.user, ["full_name"])%}
+ <div style="display:flex; justify-content:space-between; margin-left:20px;margin-top:10px;margin-bottom:10px;">
+      <div>
+<div style="display:flex; flex-direction:column; align-items:center; margin-right:20px;">
+    <div>
+<img style="width:40px; height:40px; margin-top:0px;" src="/files/markabat logoce3b5ed30c07.png">
+</div>
+<div>
+    وزارة الداخلية
+</div>
+<div>
+الادارة العامه لمركبات الشرطه 
+</div>
+
+</div>
+
+</div>
+         <div style="border:2px solid black; height:fit-content; width:fit-content; text-align:center; font-weight:bold;">
+    تاريخ الطباعة
+    <br>
+    {{ frappe.utils.today() }}
+  <br>
+  الطباعة بواسطة
+  <br>
+  {{user}}
+  </div>
+  
+ </div>
+
+<div class="sec1">
+<div id="example1">
+  <p style = "text-align:center;font-size:20px;font-weight:bold;">أمر تورد رقم )<br> لعام 202</p>
+</div>
+</div>
+
+<div class="sec2">
+    <p><span>شركة / {{doc.accepted_supplier1}}</span><br>نرجو توريد الاصناف الاتيه بعد الاداره العامه لمركبات الشرطه (اداره المخازن) مصحوبه بفاتوره من اصل وثلاثه صور وذلك كما ورد بعطائكم المقدم منكم مع الاحاطه بانه فى حاله التاخير في توريد الاصناف عن المده المحدده بامر التوريد توقع عليكم غرامه طبقا لنص الماده 48 من قانون 182 لسنه 2018 وماده رقم 98 من لائحته التنفيذيه كما نود احاطتكم انه يحكم هذا التعاقد القانون رقم 182 لسنه 2018</p>
+</div>
+
+
+
+<div class="sec3">
+<table class="item1">
+<thead>
+  <tr>
+    <th rowspan="2">م<br></th>
+    <th rowspan="2">اسم الصنف<br></th>
+    <th rowspan="2">الكمية</th>
+    <th rowspan="2">الوحدة</th>
+    <th colspan="2">{{doc.accepted_supplier1}} </th>
+    
+    
+    <th rowspan="2">المنشأ<br></th>
+    <th rowspan="2">المركبه</th>
+    <th rowspan="2">الجهة<br></th>
+    <th rowspan="2">الاذن<br></th>
+    <th rowspan="2">ماركه موديل</th>
+  </tr>
+  <tr>
+    <th>سعر الوحده<br></th>
+    <th>الاجمالى</th>
+>
+  </tr>
+</thead>
+{%- for row in doc.order_request_items -%}
+<tbody>
+
+  <tr>
+    <td>{{row.idx}}</td>
+    <td>{{row.item_name}}</td>
+    <td>{{row.qty}}</td>
+    <td>{{row.uom}}<br></td>
+    <td>{{row.rate}}</td>
+    <td>{{row.amount}}</td>
+    <td>{{row.brand}} </td>
+    <td rowspan="8">{{row.vehicle_no}}</td>
+    <td rowspan="8">{{row.entity_name}}</td>
+    <td rowspan="8">{{row.maintenance_order}}</td>
+    <td rowspan="8">{{row.vehicle_brand}} - {{row.vehicle_model}}</td>
+  </tr>
+
+ 
+</tbody>
+{%- endfor -%}
+</table>
+</div>
+<div class="sec4">   - <p>
+     <br>
+  التعاقدات <span style="margin-right:70px;">مدير اداره التعاقدات</span> <span style="margin-right:150px; font-weight:bold; text-align:left;">وكيل الاداره للشئون الماليه الادارية</span>
+  <br>
+    ابراهيم سعيد <span style="margin-right:70px;">مقدم هيثم غالي</span> <span style="margin-right:150px; font-weight:bold; text-align:left;">لواء/ محمود والى</span>
+
+    </p>
+</div>

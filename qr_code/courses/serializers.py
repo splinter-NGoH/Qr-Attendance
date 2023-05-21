@@ -9,6 +9,7 @@ from qr_code.courses.models import Course, StudentCourses
 
 class StudentCoursesSerializer(serializers.ModelSerializer):
     course_info = serializers.SerializerMethodField(read_only=True)
+    course_id = serializers.CharField(source="course.id")
     def get_course_info(self, obj):
         return {
             "title": obj.course.title,
