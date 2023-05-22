@@ -342,8 +342,14 @@ DJOSER = {
 
 
 }
+from firebase_admin import credentials
+
 from firebase_admin import initialize_app
-FIREBASE_APP = initialize_app()
+import firebase_admin
+# FIREBASE_APP = initialize_app()
+cred_path = os.path.join(BASE_DIR, "qr-code-c46ee-firebase-adminsdk-30ng9-eb0eb3edbe.json")
+cred = credentials.Certificate(cred_path)
+firebase_admin.initialize_app(cred)
 # Or just
 FCM_DJANGO_SETTINGS = {
      # an instance of firebase_admin.App to be used as default for all fcm-django requests
