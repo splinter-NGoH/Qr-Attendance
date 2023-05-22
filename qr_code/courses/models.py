@@ -18,7 +18,7 @@ class Course(TimeStampedUUIDModel):
     )
     title = models.CharField(verbose_name=_("title"), max_length=250)
     slug = AutoSlugField(populate_from="title", always_update=True, unique=True)
-    description = models.CharField(verbose_name=_("description"), max_length=255)
+    description = models.CharField(verbose_name=_("description"), max_length=255,unique=True)
     banner_image = models.ImageField(
         verbose_name=_("banner image"), default="/customer_default.jpg"
     )

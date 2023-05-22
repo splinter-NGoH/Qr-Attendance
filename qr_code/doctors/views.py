@@ -7,6 +7,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from fcm_django.models import FCMDevice
 
 # from authors_api.settings.production import DEFAULT_FROM_EMAIL
 
@@ -84,4 +85,58 @@ class UpdateDoctorAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+from firebase_admin.messaging import Message, Notification
+from fcm_django.models import FCMDevice
+from firebase_admin import messaging
+from qr_code.courses.models import Course, StudentCourses
+
+class SendNotification(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated,]
+    # serializer_class = CreateStudentAttendanceSerializer
+    # ordering_fields = ["-created_at"]
+    def post(self, request, **kwargs):
+        data = request.data
+        message = messaging.Message(
+                        notification=messaging.Notification(
+                                title=data["title"],
+                                body=data["body"],
+                        ),
+                        )
+        try:
+            student_courses = StudentCourses.objects.filter(course__id=data["course_id"])
+            for student in student_courses:
+                FCMDevice.objects.filter(user=student.user).send_message(
+                                message
+                                )           
+        except Exception as e:
+            return Response({"Error": e}, status=status.HTTP_201_CREATED)
+
+
+        # try:
+        #     attendance_request = AttendanceRequest.objects.get(id=uuid)
+        # except AttendanceRequest.DoesNotExist:
+        #     raise NotFound("AttendanceRequest does not exist")
+        # # Add check if student scaned before can't scan more than one time
+        # create_student_attendance = CreateStudentAttendanceObject(attendance_request, request=request)
+        # if create_student_attendance.qrcode_not_valid():
+        #     raise InvalidQrcode
+        # if  create_student_attendance.duplicate():
+        #     raise DuplicateQrcode
+        # data = request.data
+        # data["attendance_request"] = attendance_request.pkid
+        # data["student"] = Student.objects.get(user=request.user).pkid
+        # data["lecture"] = attendance_request.lecture.pkid
+        # data["course"] = attendance_request.course.pkid
+        # data["status"] = StudentAttendance.Status.ACCEPTED
+        # serializer = CreateStudentAttendanceSerializer(data=data, context={"request": request})
+        # serializer.is_valid(raise_exception=True)
+        # serializer.save()
+        # formatted_response = {
+        #     "status_code": status.HTTP_200_OK,
+        #     "student_attendance_request": {
+        #     "id":serializer.data["id"],
+        #     "status":"Added Succeffully"
+        #     }
+        # }
+        return Response({"Success":"Notification Sent Successfully"}, status=status.HTTP_201_CREATED)
 
