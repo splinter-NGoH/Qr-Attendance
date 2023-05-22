@@ -179,8 +179,8 @@ class StudentAttendanceReportByUsername(generics.GenericAPIView):
             student_course = StudentCourses.objects.filter(user__username=username, course=course_obj.pkid)
         except StudentCourses.DoesNotExist:
             raise NotFound("Student doesn't assigned to this course")
-        lectures_count= self.student_attendance(request.user.username, course_obj.pkid, course_type="lecture")
-        sections_count= self.student_attendance(request.user.username, course_obj.pkid, course_type="section")
+        lectures_count= self.student_attendance(username, course_obj.pkid, course_type="lecture")
+        sections_count= self.student_attendance(username, course_obj.pkid, course_type="section")
         formatted_response = {
             "status_code": status.HTTP_200_OK,
             "lectures_count": lectures_count,
