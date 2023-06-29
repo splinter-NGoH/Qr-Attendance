@@ -1,12 +1,15 @@
+
 {% set user = frappe.db.get_value("User", frappe.session.user, ["full_name"])%}
- <div style="display:flex; justify-content:space-between; margin-left:20px;margin-top:10px;margin-bottom:10px;">
-      <div>
+{% set numbers = ({"0":"٠","1":"١","2": "٢", "3":"٣", "4":"٤", "5":"٥", "6":"٦", "7":"٧", "8":"٨", "9":"٩"}) %}
+
+<div style="display:flex; justify-content:space-between; margin-left:20px;margin-top:10px;margin-bottom:-60px;">
+     <div>
 <div style="display:flex; flex-direction:column; align-items:center; margin-right:20px;">
-    <div>
+   <div>
 <img style="width:40px; height:40px; margin-top:0px;" src="/files/markabat logoce3b5ed30c07.png">
 </div>
 <div>
-    وزارة الداخلية
+   وزارة الداخلية
 </div>
 <div>
 الادارة العامه لمركبات الشرطه 
@@ -15,80 +18,229 @@
 </div>
 
 </div>
-         <div style="border:2px solid black; height:fit-content; width:fit-content; text-align:center; font-weight:bold;">
-    تاريخ الطباعة
-    <br>
-    {{ frappe.utils.today() }}
-  <br>
-  الطباعة بواسطة
-  <br>
-  {{user}}
-  </div>
+        <div style="border:2px solid black; height:fit-content; width:fit-content; text-align:center; font-weight:bold;">
+   تاريخ الطباعة
+   <br>
+   {% set print_date = frappe.utils.today() %}
   
+  {% set date2 = [] %}
+  {% for char in print_date | string %}
+ <span style="display: none;">{{ date2.append(numbers.get(char|string, char)) }}</span> 
+  {% endfor %}
+
+  {% set print_date = date2|join("") %}
+  {{ print_date.split("-")[2] }} / {{ print_date.split("-")[1] }} / {{ print_date.split("-")[0] }}
+ <br>
+ الطباعة بواسطة
+ <br>
+ {{user}}
  </div>
-
-<div class="sec1">
-<div id="example1">
-  <p style = "text-align:center;font-size:20px;font-weight:bold;">أمر تورد رقم )<br> لعام 202</p>
-</div>
-</div>
-
-<div class="sec2">
-    <p><span>شركة / {{doc.accepted_supplier1}}</span><br>نرجو توريد الاصناف الاتيه بعد الاداره العامه لمركبات الشرطه (اداره المخازن) مصحوبه بفاتوره من اصل وثلاثه صور وذلك كما ورد بعطائكم المقدم منكم مع الاحاطه بانه فى حاله التاخير في توريد الاصناف عن المده المحدده بامر التوريد توقع عليكم غرامه طبقا لنص الماده 48 من قانون 182 لسنه 2018 وماده رقم 98 من لائحته التنفيذيه كما نود احاطتكم انه يحكم هذا التعاقد القانون رقم 182 لسنه 2018</p>
-</div>
-
-
-
-<div class="sec3">
-<table class="item1">
-<thead>
-  <tr>
-    <th rowspan="2">م<br></th>
-    <th rowspan="2">اسم الصنف<br></th>
-    <th rowspan="2">الكمية</th>
-    <th rowspan="2">الوحدة</th>
-    <th colspan="2">{{doc.accepted_supplier1}} </th>
-    
-    
-    <th rowspan="2">المنشأ<br></th>
-    <th rowspan="2">المركبه</th>
-    <th rowspan="2">الجهة<br></th>
-    <th rowspan="2">الاذن<br></th>
-    <th rowspan="2">ماركه موديل</th>
-  </tr>
-  <tr>
-    <th>سعر الوحده<br></th>
-    <th>الاجمالى</th>
->
-  </tr>
-</thead>
-{%- for row in doc.order_request_items -%}
-<tbody>
-
-  <tr>
-    <td>{{row.idx}}</td>
-    <td>{{row.item_name}}</td>
-    <td>{{row.qty}}</td>
-    <td>{{row.uom}}<br></td>
-    <td>{{row.rate}}</td>
-    <td>{{row.amount}}</td>
-    <td>{{row.brand}} </td>
-    <td rowspan="8">{{row.vehicle_no}}</td>
-    <td rowspan="8">{{row.entity_name}}</td>
-    <td rowspan="8">{{row.maintenance_order}}</td>
-    <td rowspan="8">{{row.vehicle_brand}} - {{row.vehicle_model}}</td>
-  </tr>
-
  
-</tbody>
-{%- endfor -%}
-</table>
 </div>
-<div class="sec4">   - <p>
-     <br>
-  التعاقدات <span style="margin-right:70px;">مدير اداره التعاقدات</span> <span style="margin-right:150px; font-weight:bold; text-align:left;">وكيل الاداره للشئون الماليه الادارية</span>
-  <br>
-    ابراهيم سعيد <span style="margin-right:70px;">مقدم هيثم غالي</span> <span style="margin-right:150px; font-weight:bold; text-align:left;">لواء/ محمود والى</span>
 
+   <div class="sec-two">
+           <div class="title">
+               <p class="p-tag"> إذن صرف</p>
+           </div>
+   </div>
+
+
+   <div style="text-align: center;">
+    
+
+    {% set year = [] %}
+    {% for char in doc.year | string %}
+    <span style="display: none;">{{ year.append(numbers.get(char|string, char)) }}</span> 
+    {% endfor %}
+    {% set tawreed_no = [] %}
+    {% for char in doc.tawreed_no | string %}
+    <span style="display: none;">{{ tawreed_no.append(numbers.get(char|string, char)) }}</span> 
+    {% endfor %}
+    {% if doc.purchase_invoice %}
+    <p style="font-weight: bold;">  رقم أمر التوريد  : {{ tawreed_no|join("") }} 
+    <br>
+    المورد {{doc.supplier}}
     </p>
+
+    {% else %}
+    {% set order_no = [] %}
+    {% for char in doc.order_no | string %}
+    <span style="display: none;">{{ order_no.append(numbers.get(char|string, char)) }}</span> 
+    {% endfor %}
+     <p style="font-weight: bold;"> أمر شغل رقم : {{ order_no|join("") }}
+      <br>
+    المورد {{doc.supplier}}
+     </p>
+     
+     {% endif %}
+
+     <p style="font-weight: bold;">   للسنة المالية : {{ year|join("") }}</p>
+     {% if not doc.purchase_invoice %}
+
+  {% set exchange_allowance, litre_capacity, fuel_type = frappe.db.get_value("Vehicles", doc.vehicles, ["exchange_allowance", "litre_capacity", "fuel_type"]) %}
+    <div class="header-box">
+        <div class="header-img">
+            <img src="/files/markabat logoce3b5ed30c07.png" alt="">
+        </div>
+        <div class="sec-three">
+            <div>
+
+                {% set vehicle_no = [] %}
+                {% for char in doc.vehicle_no | string %}
+               <span style="display: none;">{{ vehicle_no.append(numbers.get(char|string, char)) }}</span> 
+                {% endfor %}
+            <p>  رقم المركبة شرطة:  {{ vehicle_no|join("") }}</p>
+            <p>    الشكل: {{doc.vehicle_shape}}</p>
+            <p>    مخصص الصرف: {{exchange_allowance}}</p>
+            <p >  الجهه التابع لها : {{doc.entity_name}} </p>
+            {% if doc.maintenance_entity %}
+            <p >  جهة الصيانة : {{doc.maintenance_entity}} </p>
+
+            {% else %}
+            <p > جهة الصيانة :   -  </p>
+
+            {% endif %}
+            </div>
+            <div>
+                {% set chassis_no = [] %}
+                {% for char in doc.chassis_no | string %}
+               <span style="display: none;">{{ chassis_no.append(numbers.get(char|string, char)) }}</span> 
+                {% endfor %}
+             <p > رقم الشاسية :  {{chassis_no|join("")}} </p>
+             <p >  مجموعة الشكل :  {{doc.group_shape}} </p>
+             {% set vehicle_model = [] %}
+             {% for char in doc.vehicle_model | string %}
+            <span style="display: none;">{{ vehicle_model.append(numbers.get(char|string, char)) }}</span> 
+             {% endfor %}
+             <p >   الموديل  :  {{vehicle_model|join("")}} </p>
+             {% set litre_capacity1 = [] %}
+             {% for char in litre_capacity | string %}
+            <span style="display: none;">{{ litre_capacity1.append(numbers.get(char|string, char)) }}</span> 
+             {% endfor %}
+             <p >   السعة اللترية:  {{litre_capacity1|join("")}} </p>
+             
+            </div>
+            <div >
+             <p> الماركه / الطراز :  {{doc.vehicle_style}} / {{doc.vehicle_brand}} </p>
+             {% set motor_no = [] %}
+             {% for char in doc.motor_no | string %}
+            <span style="display: none;">{{ motor_no.append(numbers.get(char|string, char)) }}</span> 
+             {% endfor %}
+             <p >   رقم الموتور : {{motor_no|join("")}}</p>
+             
+             <p >   نوع الوقود          : {{fuel_type}}</p>
+             {% set ezn_no = [] %}
+             {% for char in doc.ezn_no | string %}
+            <span style="display: none;">{{ ezn_no.append(numbers.get(char|string, char)) }}</span> 
+             {% endfor %}
+             <p >    رقم الإذن          : {{ezn_no|join("")}}</p>
+
+             {% set date = [] %}
+             {% for char in doc.date | string %}
+            <span style="display: none;">{{ date.append(numbers.get(char|string, char)) }}</span> 
+             {% endfor %}
+             {% set date = date|join("") %}
+
+             <p > تاريخ إذن اللإصلاح : {{date.split("-")[2]}} - {{date.split("-")[1]}} - {{date.split("-")[0]}}</p>
+            </div>
+        </div>
+     
+
+   </div>
+   {%endif%}
+
+<div class="sec-four">
+<table class="table-border">
+<thead>
+ <tr>
+   <th> م</th>
+   <th> بيان الصنف</th>
+   <th> كود القطعة</th>
+   <th>الكمية</th>
+   <th> الوحدة  </th>
+   <th> الخصم  </th>
+   <th>القيمة</th>
+   <th>الملاحظات</th>
+ </tr>
+</thead>
+<tbody>
+  {% set counter1 = namespace(value=1) %}
+  
+{%- for row in doc.purchase_invoices_table -%}
+{% if  row.maintenance_type == "توريد وتركيب" %}
+ <tr>
+  {% set counter12 = [] %}
+  {% for char in counter1.value | string %}
+  <span style="display: none;">{{ counter12.append(numbers.get(char|string, char)) }}</span> 
+  {% endfor %}
+<td>   {{counter12|join("")}}</td>
+   {% set item_name = [] %}
+   {% for char in row.item_name | string %}
+   <span style="display: none;">{{ item_name.append(numbers.get(char|string, char)) }}</span> 
+   {% endfor %}
+   <td>  {{item_name|join("")}} </td>
+   {% set item_code = [] %}
+   {% for char in row.item_code | string %}
+   <span style="display: none;">{{ item_code.append(numbers.get(char|string, char)) }}</span> 
+   {% endfor %}
+   <td>{{item_code|join("")}} </td>
+   {% if row.part_qty %}
+   {% set qty = [] %}
+   {% for char in row.part_qty | string %}
+   <span style="display: none;">{{ qty.append(numbers.get(char|string, char)) }}</span> 
+   {% endfor %}
+   <td>{{qty|join("")}} </td>
+   {% else %}
+   <td>-</td>
+    {% endif %}
+   <td>{{row.default_unit_of_measure}}</td>
+   {% if row.disc_rate %}
+   {% set disc = [] %}
+   {% for char in row.disc_rate | string %}
+   <span style="display: none;">{{ disc.append(numbers.get(char|string, char)) }}</span> 
+   {% endfor %}
+   <td>{{disc|join("")}}</td>
+   {% else %}
+   <td>-</td>
+   {% endif %}
+   {% if row.part_price %}
+   {% set part_price = [] %}
+   {% for char in row.part_price | string %}
+   <span style="display: none;">{{ part_price.append(numbers.get(char|string, char)) }}</span> 
+   {% endfor %}
+   <td>{{part_price|join("")}}</td>
+   {% else %}
+   <td>-</td>
+   {% endif %}
+   <td></td>
+ </tr>
+ {% set counter1.value = counter1.value + 1 %}
+
+ {% endif %}
+  {%- endfor -%}
+
+</tbody>
+</table>
+<div  style="margin:20px; display: flex; justify-content: space-around;align-items: center; font-size: 12pt; font-weight: bold;">
+                 <div>
+                    مهندس الإصلاح الخارجي/
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    
+                 </div>  
+                 <div>
+                  رئيس قسم الصيانة/
+                  <br>
+                    <br>
+                    <br>
+                    <br>
+                 </div>
+                 <div>
+                  يصرف,,
+                  <br>
+                  رئيس قسم المخازن/
+                 </div>
+</div>
 </div>

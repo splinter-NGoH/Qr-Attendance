@@ -85,7 +85,7 @@ class CreateAttendanceRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AttendanceRequest
-        fields = ["id", "user", "lecture", "course", "period", "cur_qrcode"]
+        fields = ["id", "user", "lecture", "course", "period","week_no", "cur_qrcode"]
 
     def get_cur_qrcode(self, obj):
         current_qrcodes = obj.qr_codes.all()

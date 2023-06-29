@@ -124,6 +124,7 @@ class CreateStudentAttendance(generics.GenericAPIView):
         data["student"] = Student.objects.get(user=request.user).pkid
         data["lecture"] = attendance_request.lecture.pkid
         data["course"] = attendance_request.course.pkid
+        data["week_no"] = attendance_request.week_no
         data["status"] = StudentAttendance.Status.ACCEPTED
         serializer = CreateStudentAttendanceSerializer(data=data, context={"request": request})
         serializer.is_valid(raise_exception=True)
@@ -155,6 +156,7 @@ class StudentAttendanceReport(generics.GenericAPIView):
         lectures_count= self.student_attendance(request.user.pkid, course_obj.pkid, course_type="lecture")
         sections_count= self.student_attendance(request.user.pkid, course_obj.pkid, course_type="section")
         formatted_response = {
+            
             "status_code": status.HTTP_200_OK,
             "lectures_count": lectures_count,
             "sections_count": sections_count,
@@ -189,3 +191,51 @@ class StudentAttendanceReportByUsername(generics.GenericAPIView):
             "sections_percent":  (sections_count / course_obj.session_counts) *100,
         }
         return Response(formatted_response, status=status.HTTP_200_OK)
+
+from rest_framework.viewsets import ReadOnlyModelViewSet
+from drf_excel.mixins import XLSXFileMixin
+from drf_excel.renderers import XLSXRenderer
+
+from .models import StudentAttendance
+from .serializers import StudentAtendanceSerializer
+
+class StudentAttendanceReportByUser(XLSXFileMixin, ReadOnlyModelViewSet):
+    serializer_class = StudentAtendanceSerializer
+    renderer_classes = (XLSXRenderer,)
+    filename = 'my_export.xlsx'
+    def get_queryset(self):
+        course = self.kwargs['course']
+        cur_course = Course.objects.get(id=course)
+        return StudentCourses.objects.filter(course=cur_course.pkid)
+    # def get_header(self):
+    #     return {
+    #     'titles': [
+    #         "student_name",
+    #         "Column_2_name",
+    #         "Column_3_name",
+    #     ],
+    #     'column_width': [17, 30, 17],
+    #     'height': 25,
+    #     'style': {
+    #         'fill': {
+    #             'fill_type': 'solid',
+    #             'start_color': 'FFCCFFCC',
+    #         },
+    #         'alignment': {
+    #             'horizontal': 'center',
+    #             'vertical': 'center',
+    #             'wrapText': True,
+    #             'shrink_to_fit': True,
+    #         },
+    #         'border_side': {
+    #             'border_style': 'thin',
+    #             'color': 'FF000000',
+    #         },
+    #         'font': {
+    #             'name': 'Arial',
+    #             'size': 14,
+    #             'bold': True,
+    #             'color': 'FF000000',
+    #         },
+    #     },
+    # }

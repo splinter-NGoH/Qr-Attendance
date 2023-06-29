@@ -5,7 +5,7 @@ from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
 
 from qr_code.common.models import TimeStampedUUIDModel
-from qr_code.courses.models import Course
+from qr_code.courses.models import Course, StudentCourses
 from qr_code.lecture.models import Lectures, AttendanceRequest
 User = get_user_model()
 
@@ -64,8 +64,9 @@ class StudentAttendance(TimeStampedUUIDModel):
     )
     attendance_request = models.ForeignKey(AttendanceRequest, related_name="student_attendance_requests", on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.REJECTED)
+    week_no = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return f"{self.student.user.username}'s student"
-
+    
     

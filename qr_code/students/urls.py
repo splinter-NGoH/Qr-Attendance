@@ -8,6 +8,7 @@ from .views import (
     CreateStudentAttendance,
     StudentAttendanceReport,
     StudentAttendanceReportByUsername,
+    StudentAttendanceReportByUser
 )
 
 urlpatterns = [
@@ -32,5 +33,8 @@ urlpatterns = [
     ),
     path(
         "attendance_report_by_username_and_course/<str:course>/<str:username>/", StudentAttendanceReportByUsername.as_view(), name="get-student-report-by-username"
+    ),
+    path(
+        "attendance_report_by_user_and_course/<str:course>/", StudentAttendanceReportByUser.as_view({'get':'list'}), name="get-student-report-by-user"
     ),
 ]

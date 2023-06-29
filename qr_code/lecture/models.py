@@ -38,6 +38,7 @@ class AttendanceRequest(TimeStampedUUIDModel):
         Course, related_name="course_attendance_request", on_delete=models.CASCADE
     )
     period = models.IntegerField(default=0)
+    week_no = models.IntegerField(default=1)
 
     def __str__(self):
         return self.user.username
